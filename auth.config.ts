@@ -1,6 +1,5 @@
 import Google from "next-auth/providers/google";
 import type { NextAuthConfig, Session } from "next-auth";
-import { getProfile } from "./lib/auth/profile";
 
 export default {
   //   debug: process.env.NODE_ENV !== "production",
