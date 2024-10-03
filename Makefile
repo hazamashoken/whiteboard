@@ -4,14 +4,10 @@ export $(shell sed 's/=.*//' .env)
 
 # run dev server
 dev:
-	cd app && npm run dev
-
-# test
-test: docker-image-build docker-image-rm
+	npm run dev
 
 # bump versions
 bump:
-	cd app &&\
 	npm i next@latest react@latest react-dom@latest eslint-config-next@latest &&\
 	npm update
 # generate typesafe api schema to app/schemas/gateway-api-schema.d.ts
@@ -44,4 +40,11 @@ db-drop:
 	@read -p "Enter Y to confirm: " confirm; \
 	if [ $$confirm = "Y" ]; then \
 		npx drizzle-kit drop; \
+	fi;
+
+drop-tables:
+	@echo "Droping table at database: ${POSTGRES_URI}"
+	@read -p "Enter Y to confirm: " confirm; \
+	if [ $$confirm = "Y" ]; then \
+		psql ${POSTGRES_URI} -c 'DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;'; \
 	fi;

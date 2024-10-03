@@ -1,28 +1,37 @@
-import { PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import * as schema from "@/schemas";
+// This approach is taken from https://github.com/vercel/next.js/tree/canary/examples/with-mongodb
+import { MongoClient, ServerApiVersion } from "mongodb";
 
-/**
- * Single client is instantiated and shared across the application.
- * This Postgres client is used by Drizzle ORM.
- */
-
-declare global {
-  // eslint-disable-next-line no-var
-  var drizzle: PostgresJsDatabase<typeof schema> | undefined;
+if (!process.env.MONGODB_URI) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
 }
 
-let db: PostgresJsDatabase<typeof schema>;
+const uri = process.env.MONGODB_URI;
+const options = {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+};
 
-if (process.env.NODE_ENV !== "production") {
-  if (!global.drizzle)
-    global.drizzle = drizzle(postgres(`${process.env.POSTGRES_URI}`), {
-      schema,
-    });
+let client: MongoClient;
 
-  db = global.drizzle;
+if (process.env.NODE_ENV === "development") {
+  // In development mode, use a global variable so that the value
+  // is preserved across module reloads caused by HMR (Hot Module Replacement).
+  const globalWithMongo = global as typeof globalThis & {
+    _mongoClient?: MongoClient;
+  };
+
+  if (!globalWithMongo._mongoClient) {
+    globalWithMongo._mongoClient = new MongoClient(uri, options);
+  }
+  client = globalWithMongo._mongoClient;
 } else {
-  db = drizzle(postgres(`${process.env.POSTGRES_URI}`), { schema });
+  // In production mode, it's best to not use a global variable.
+  client = new MongoClient(uri, options);
 }
 
-export { db };
+// Export a module-scoped MongoClient. By doing this in a
+// separate module, the client can be shared across functions.
+export default client;

@@ -7,7 +7,7 @@ FROM base AS prod-deps
 RUN npm install --omit-dev
 
 FROM prod-deps AS builder
-ARG POSTGRES_URI
+ARG MONGODB_URI
 
 RUN rm -rf "app/test"
 RUN npm install
