@@ -15,6 +15,7 @@ export interface ContentDocument {
   createdAt: Date;
   updatedAt: Date;
 }
+
 const ContentSchema = new Schema<ContentDocument>(
   {
     name: { type: String, required: true },
@@ -25,6 +26,7 @@ const ContentSchema = new Schema<ContentDocument>(
   },
   { timestamps: true }
 );
+
 const Content =
   mongoose.models?.Content || model<ContentDocument>("Content", ContentSchema);
 

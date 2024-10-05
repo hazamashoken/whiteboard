@@ -14,7 +14,6 @@ export interface AssignmentDocument {
   name: string;
   description: string;
   active: boolean;
-
   type: string;
   body: {
     type: string;

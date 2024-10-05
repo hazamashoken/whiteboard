@@ -1,6 +1,6 @@
 "use server";
 import { connectDB } from "@/db/mongoose";
-import { Profile } from "@/models/Profile";
+import { Profile } from "@/models/Profiles";
 
 export const register = async (values: any) => {
   const { email, firstName, lastName } = values;
