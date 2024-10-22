@@ -43,28 +43,6 @@ export default function Page() {
     <div className="container mx-auto p-6">
       <header className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Annoucement</h1>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="md:hidden">
-              <Menu className="h-6 w-6" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-64">
-            <nav className="flex flex-col space-y-2">
-              {menuItems.map((item) => (
-                <Button
-                  key={item._id}
-                  variant={activeTab === item._id ? "default" : "ghost"}
-                  className="justify-start"
-                  onClick={() => setActiveTab(item._id)}
-                >
-                  <item.icon className="mr-2 h-4 w-4" />
-                  {item.label}
-                </Button>
-              ))}
-            </nav>
-          </SheetContent>
-        </Sheet>
       </header>
       <div className="grid gap-6">
         <main>

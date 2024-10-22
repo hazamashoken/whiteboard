@@ -39,7 +39,7 @@ type Submission = {
   content: ContentItem[];
 };
 
-export default function CourseManagement({
+export function CourseManagement({
   isTeacher = true,
 }: {
   isTeacher?: boolean;

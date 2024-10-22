@@ -2,6 +2,7 @@
 
 import { connectDB } from "@/db/mongoose";
 import { Course, CourseDocument, Profile } from "@/models";
+import { mongoToJSON } from "../utils";
 
 // addStudentsToCourse
 // addTeachersToCourse
@@ -20,9 +21,7 @@ export async function addStudentsToCourse(courseId: string, userIds: string[]) {
       },
     },
     { new: true }
-  )
-    .populate("students")
-    .populate("teachers");
+  );
 
   if (!course) {
     return {
@@ -42,7 +41,7 @@ export async function addStudentsToCourse(courseId: string, userIds: string[]) {
 
   return {
     error: null,
-    data: JSON.parse(JSON.stringify(course)),
+    data: mongoToJSON(course),
   };
 }
 
@@ -56,9 +55,7 @@ export async function addTeachersToCourse(courseId: string, userIds: string[]) {
       },
     },
     { new: true }
-  )
-    .populate("students")
-    .populate("teachers");
+  );
 
   if (!course) {
     return {
@@ -78,7 +75,7 @@ export async function addTeachersToCourse(courseId: string, userIds: string[]) {
 
   return {
     error: null,
-    data: JSON.parse(JSON.stringify(course)),
+    data: mongoToJSON(course),
   };
 }
 
@@ -124,7 +121,7 @@ export async function createCourse(payload: CourseCreationPayload): Promise<{
 
   return {
     error: null,
-    data: JSON.parse(JSON.stringify(course)),
+    data: mongoToJSON(course),
   };
 }
 
@@ -157,7 +154,7 @@ export async function editCourse(
 
   return {
     error: null,
-    data: JSON.parse(JSON.stringify(course)),
+    data: mongoToJSON(course),
   };
 }
 
@@ -181,7 +178,7 @@ export async function toggleCourse(courseId: string): Promise<{
 
   return {
     error: null,
-    data: JSON.parse(JSON.stringify(course)),
+    data: mongoToJSON(course),
   };
 }
 
@@ -206,7 +203,7 @@ export async function getCourseByProfile(profileId: string): Promise<{
 
   return {
     error: null,
-    data: JSON.parse(JSON.stringify(course)),
+    data: mongoToJSON(course),
   };
 }
 
@@ -228,7 +225,7 @@ export async function getAllCoursesAdmin(): Promise<{
 
   return {
     error: null,
-    data: JSON.parse(JSON.stringify(courses)),
+    data: mongoToJSON(courses),
   };
 }
 
@@ -239,7 +236,9 @@ export async function getCourseById(courseId: string): Promise<{
   await connectDB();
   const course = await Course.findById<CourseDocument>(courseId)
     .populate("students")
-    .populate("teachers");
+    .populate("teachers")
+    .populate("contents")
+    .populate("assignments");
 
   if (!course) {
     return {
@@ -250,6 +249,6 @@ export async function getCourseById(courseId: string): Promise<{
 
   return {
     error: null,
-    data: JSON.parse(JSON.stringify(course)),
+    data: mongoToJSON(course),
   };
 }

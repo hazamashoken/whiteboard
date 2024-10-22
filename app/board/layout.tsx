@@ -17,8 +17,6 @@ import {
   User,
 } from "lucide-react";
 import React from "react";
-import { checkRole } from "@/lib/auth/check-role";
-import { PROFILE_TYPES } from "@/models";
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -29,18 +27,18 @@ export default function Layout({ children }: LayoutProps) {
   const navItems = [
     { href: "/board/announcement", label: "Annoucement", icon: Bell },
     { href: "/board/courses", label: "Courses", icon: Book },
-    {
-      href: "/board/assignments",
-      label: "Assignments",
-      icon: GraduationCap,
-    },
-    // { href: "/board/messages", label: "Messages", icon: MessageSquare },
+    // {
+    //   href: "/board/assignments",
+    //   label: "Assignments",
+    //   icon: GraduationCap,
+    // },
+    { href: "/board/messages", label: "Messages", icon: MessageSquare },
     {
       href: "/board/admin",
       label: "Admin",
       icon: Settings,
     },
-    { href: "/board/profile", label: "Profile", icon: User },
+    // { href: "/board/profile", label: "Profile", icon: User },
   ];
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">

@@ -119,7 +119,7 @@ export function CourseForm({ courseId }: { courseId: string }) {
           disabled={file !== null}
           endpoint="productPdf"
           onClientUploadComplete={(res) => {
-            console.log("Files: ", res[0]);
+            console.log("File: ", res[0]);
             form.setValue("file", res[0]);
           }}
           onUploadError={(error: Error) => {

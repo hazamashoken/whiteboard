@@ -1,7 +1,7 @@
 import { getCourseById } from "@/lib/edu/courses";
 import { notFound } from "next/navigation";
-import CourseManagement from "./_components/course-edit";
-import { CourseForm } from "./_components/content-add-form";
+import { CourseManagement } from "../../_components/course-edit";
+import { CourseForm } from "../../_components/content-add-form";
 import {
   Card,
   CardContent,
@@ -24,7 +24,6 @@ export default async function CourseEditPage({
   }
   return (
     <>
-      {/* <CourseManagement /> */}
       <Card>
         <CardHeader>
           <CardTitle>Edit Course</CardTitle>
