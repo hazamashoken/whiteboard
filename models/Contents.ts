@@ -1,19 +1,17 @@
 import mongoose, { Schema, model } from "mongoose";
+import { UploadedFileData } from "uploadthing/types";
 
 export interface ContentDocument {
   _id: string;
   name: string;
   description: string;
 
-  type: string;
-  body: {
-    type: string;
-    content: any;
-  };
+  body: string;
   active: boolean;
   course: { type: mongoose.Types.ObjectId; ref: "Course" };
   createdAt: Date;
   updatedAt: Date;
+  file: UploadedFileData | null;
 }
 
 const ContentSchema = new Schema<ContentDocument>(
@@ -21,12 +19,13 @@ const ContentSchema = new Schema<ContentDocument>(
     name: { type: String, required: true },
     description: { type: String },
     active: { type: Boolean, default: true },
-    type: { type: String, require: true },
     course: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
       required: true,
     },
+    body: { type: String },
+    file: { type: Object },
   },
   { timestamps: true }
 );

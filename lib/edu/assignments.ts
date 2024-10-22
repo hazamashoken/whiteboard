@@ -2,6 +2,7 @@
 
 import { connectDB } from "@/db/mongoose";
 import { Assignment, AssignmentDocument, Course } from "@/models";
+import { mongoToJSON } from "../utils";
 
 export type AssignmentPayload = Omit<
   AssignmentDocument,
@@ -23,7 +24,7 @@ export async function getAssignmentsByCourse(courseId: string, active = true) {
 
   return {
     error: null,
-    data: assignments,
+    data: mongoToJSON(assignments),
   };
 }
 
@@ -35,7 +36,7 @@ export async function getAssignment(assignmentId: string) {
 
   return {
     error: null,
-    data: assignment,
+    data: mongoToJSON(assignment),
   };
 }
 
@@ -45,7 +46,7 @@ export async function getAllAssignment() {
 
   return {
     error: null,
-    data: assignments,
+    data: mongoToJSON(assignments),
   };
 }
 
@@ -69,7 +70,7 @@ export async function addAssignmentToCourse(
 
   return {
     error: null,
-    data: assignment,
+    data: mongoToJSON(assignment),
   };
 }
 
@@ -118,6 +119,6 @@ export async function toggleAssignment(assignmentId: string) {
 
   return {
     error: null,
-    data: assignment,
+    data: mongoToJSON(assignment),
   };
 }

@@ -2,6 +2,7 @@
 
 import { connectDB } from "@/db/mongoose";
 import { Content, ContentDocument, Course } from "@/models";
+import { mongoToJSON } from "../utils";
 
 export type ContentPayload = Omit<
   ContentDocument,
@@ -23,7 +24,7 @@ export async function getContentsByCourse(courseId: string, active = true) {
 
   return {
     error: null,
-    data: contents,
+    data: mongoToJSON(contents),
   };
 }
 
@@ -33,7 +34,7 @@ export async function getContent(contentId: string) {
 
   return {
     error: null,
-    data: content,
+    data: mongoToJSON(content),
   };
 }
 
@@ -43,7 +44,7 @@ export async function getAllContent() {
 
   return {
     error: null,
-    data: contents,
+    data: mongoToJSON(contents),
   };
 }
 
@@ -67,7 +68,7 @@ export async function addContentToCourse(
 
   return {
     error: null,
-    data: content,
+    data: mongoToJSON(content),
   };
 }
 
@@ -113,6 +114,6 @@ export async function toggleContent(contentId: string) {
 
   return {
     error: null,
-    data: content,
+    data: mongoToJSON(content),
   };
 }

@@ -7,6 +7,10 @@ import {
 
 import type { OurFileRouter } from "@/app/api/uploadthing/core";
 
+export function mongoToJSON(doc: any) {
+  return JSON.parse(JSON.stringify(doc));
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
