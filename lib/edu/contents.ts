@@ -1,7 +1,7 @@
 "use server";
 
-import { Content, ContentDocument } from "@/models/Contents";
-import { Course } from "@/models/Courses";
+import { connectDB } from "@/db/mongoose";
+import { Content, ContentDocument, Course } from "@/models";
 
 export type ContentPayload = Omit<
   ContentDocument,
@@ -15,6 +15,7 @@ export type ContentPayload = Omit<
 // removeContent
 
 export async function getContentsByCourse(courseId: string, active = true) {
+  await connectDB();
   const contents = await Content.find<ContentDocument>({
     course: courseId,
     active,
@@ -27,6 +28,7 @@ export async function getContentsByCourse(courseId: string, active = true) {
 }
 
 export async function getContent(contentId: string) {
+  await connectDB();
   const content = await Content.findById<ContentDocument>(contentId);
 
   return {
@@ -36,6 +38,7 @@ export async function getContent(contentId: string) {
 }
 
 export async function getAllContent() {
+  await connectDB();
   const contents = await Content.find<ContentDocument>();
 
   return {
@@ -52,6 +55,7 @@ export async function addContentToCourse(
     ...payload,
     course: courseId,
   };
+  await connectDB();
 
   const content = await Content.create<ContentDocument>(data);
 
@@ -68,6 +72,7 @@ export async function addContentToCourse(
 }
 
 export async function removeContent(contentId: string) {
+  await connectDB();
   const content = await Content.findById(contentId);
 
   if (!content) {
@@ -92,6 +97,7 @@ export async function removeContent(contentId: string) {
 }
 
 export async function toggleContent(contentId: string) {
+  await connectDB();
   const content = await Content.findByIdAndUpdate<ContentDocument>(contentId, {
     $set: {
       active: false,

@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 export default async function TestLoginPage() {
   const session = await auth();

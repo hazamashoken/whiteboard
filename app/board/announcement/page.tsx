@@ -33,16 +33,16 @@ export default function Page() {
   const [activeTab, setActiveTab] = useState("announcements");
 
   const menuItems = [
-    { id: "announcements", label: "Announcements", icon: Bell },
-    { id: "courses", label: "Courses", icon: Book },
-    { id: "messages", label: "Messages", icon: Mail },
-    { id: "grades", label: "Grades", icon: GraduationCap },
+    { _id: "announcements", label: "Announcements", icon: Bell },
+    { _id: "courses", label: "Courses", icon: Book },
+    { _id: "messages", label: "Messages", icon: Mail },
+    { _id: "grades", label: "Grades", icon: GraduationCap },
   ];
 
   return (
     <div className="container mx-auto p-6">
       <header className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">WhiteBoard</h1>
+        <h1 className="text-3xl font-bold">Annoucement</h1>
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
@@ -53,10 +53,10 @@ export default function Page() {
             <nav className="flex flex-col space-y-2">
               {menuItems.map((item) => (
                 <Button
-                  key={item.id}
-                  variant={activeTab === item.id ? "default" : "ghost"}
+                  key={item._id}
+                  variant={activeTab === item._id ? "default" : "ghost"}
                   className="justify-start"
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => setActiveTab(item._id)}
                 >
                   <item.icon className="mr-2 h-4 w-4" />
                   {item.label}
@@ -66,22 +66,7 @@ export default function Page() {
           </SheetContent>
         </Sheet>
       </header>
-      <div className="grid gap-6 md:grid-cols-[240px_1fr]">
-        <aside className="hidden md:block">
-          <nav className="flex flex-col space-y-2">
-            {menuItems.map((item) => (
-              <Button
-                key={item.id}
-                variant={activeTab === item.id ? "default" : "ghost"}
-                className="justify-start"
-                onClick={() => setActiveTab(item.id)}
-              >
-                <item.icon className="mr-2 h-4 w-4" />
-                {item.label}
-              </Button>
-            ))}
-          </nav>
-        </aside>
+      <div className="grid gap-6">
         <main>
           {activeTab === "announcements" && (
             <Card>

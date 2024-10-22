@@ -66,14 +66,14 @@ export default function AssignmentPage() {
           <CardContent>
             <p className="mb-4">
               In this assignment, you will write your first Python program. The
-              goal is to create a simple &qoutHello, World!&qout program and
+              goal is to create a simple &qout;Hello, World!&qout; program and
               demonstrate your understanding of basic Python syntax.
             </p>
             <h3 className="mb-2 text-lg font-semibold">Requirements:</h3>
             <ul className="list-inside list-disc space-y-1">
-              <li>Create a Python file named &qouthello_world.py&qout</li>
+              <li>Create a Python file named &qout;hello_world.py&qout;</li>
               <li>
-                Write a program that prints &qoutHello, World!&qout to the
+                Write a program that prints &qout;Hello, World!&qout; to the
                 console
               </li>
               <li>

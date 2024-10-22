@@ -35,7 +35,7 @@ export default function CourseContent() {
             <CardHeader>
               <CardTitle>Lecture Slides</CardTitle>
               <CardDescription>
-                Download the PDF slides for this week&aposs lecture
+                Download the PDF slides for this week&apos;s lecture
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -82,12 +82,12 @@ export default function CourseContent() {
             <CardTitle>Week Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>In this week&aposs content, we cover the following topics:</p>
+            <p>In this week&apos;s content, we cover the following topics:</p>
             <ul className="mt-2 list-inside list-disc space-y-1">
               <li>What is programming?</li>
               <li>Basic concepts of algorithms</li>
               <li>Introduction to Python programming language</li>
-              <li>Writing your first &qoutHello, World!&qout program</li>
+              <li>Writing your first &qout;Hello, World!&qout; program</li>
             </ul>
           </CardContent>
         </Card>
@@ -105,7 +105,7 @@ export default function CourseContent() {
               </li>
               <li>
                 <Link href="#" className="text-blue-600 hover:underline">
-                  &qoutThink Python&qout free online book
+                  &qout;Think Python&qout; free online book
                 </Link>
               </li>
               <li>

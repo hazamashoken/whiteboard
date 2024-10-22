@@ -1,15 +1,5 @@
 import Link from "next/link";
-import {
-  Bell,
-  Book,
-  Calendar,
-  ChevronDown,
-  GraduationCap,
-  Mail,
-  Menu,
-} from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,116 +7,54 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { getCourseById } from "@/lib/edu/courses";
+import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { PenIcon } from "lucide-react";
+import { checkRole } from "@/lib/auth/check-role";
+import { PROFILE_TYPES } from "@/models";
 
-export default function Page() {
+export default async function Page({
+  params,
+}: {
+  params: { courseId: string };
+}) {
+  const { data, error } = await getCourseById(params.courseId);
+  if (data === null) {
+    notFound();
+  }
+  const isTeacher = checkRole([PROFILE_TYPES.TEACHER]);
+
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Side Navbar */}
-      <aside className="hidden w-64 flex-shrink-0 bg-white p-4 shadow-md md:block">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold">WhiteBoard</h1>
-        </div>
-        <nav className="space-y-2">
-          <Link
-            href="#"
-            className="flex items-center rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100"
-          >
-            <Bell className="mr-3 h-5 w-5" />
-            Announcements
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center rounded-lg bg-gray-200 px-4 py-2 text-gray-700"
-          >
-            <Book className="mr-3 h-5 w-5" />
-            Courses
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100"
-          >
-            <Mail className="mr-3 h-5 w-5" />
-            Messages
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100"
-          >
-            <GraduationCap className="mr-3 h-5 w-5" />
-            Grades
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Mobile Menu */}
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="outline" className="fixed left-4 top-4 md:hidden">
-            <Menu className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left">
-          <SheetHeader>
-            <SheetTitle>Acme Institute</SheetTitle>
-            <SheetDescription>E-Learning System</SheetDescription>
-          </SheetHeader>
-          <nav className="mt-6 space-y-2">
-            <Link
-              href="#"
-              className="flex items-center rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100"
-            >
-              <Bell className="mr-3 h-5 w-5" />
-              Announcements
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center rounded-lg bg-gray-200 px-4 py-2 text-gray-700"
-            >
-              <Book className="mr-3 h-5 w-5" />
-              Courses
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100"
-            >
-              <Mail className="mr-3 h-5 w-5" />
-              Messages
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100"
-            >
-              <GraduationCap className="mr-3 h-5 w-5" />
-              Grades
-            </Link>
-          </nav>
-        </SheetContent>
-      </Sheet>
-
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-4">
-        <h2 className="mb-4 text-2xl font-bold">Courses</h2>
+        <div className="flex justify-between">
+          <h2 className="mb-4 text-2xl font-bold">Courses</h2>
+          {isTeacher && (
+            <Link href={`/board/courses/${data._id}/edit`}>
+              <Button variant={"outline"}>
+                <PenIcon className="h-3 w-3 mr-2" />
+                Edit
+              </Button>
+            </Link>
+          )}
+        </div>
+
         <div className="grid gap-4 md:grid-cols-3">
           {/* Itemized Content and Assignments */}
           <div className="md:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle>Introduction to Computer Science</CardTitle>
-                <CardDescription>CS101</CardDescription>
+                <CardTitle>{data.name}</CardTitle>
+                <CardDescription>{data.description}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Accordion type="single" collapsible className="w-full">

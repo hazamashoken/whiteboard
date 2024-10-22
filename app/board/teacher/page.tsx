@@ -214,25 +214,25 @@ export default function TeacherDashboard() {
                   <TableBody>
                     {[
                       {
-                        id: "1",
+                        _id: "1",
                         name: "Alice Johnson",
                         assignment: "Hello World Program",
                         date: "2023-05-15",
                       },
                       {
-                        id: "2",
+                        _id: "2",
                         name: "Bob Smith",
                         assignment: "Hello World Program",
                         date: "2023-05-14",
                       },
                       {
-                        id: "3",
+                        _id: "3",
                         name: "Charlie Brown",
                         assignment: "Hello World Program",
                         date: "2023-05-16",
                       },
                     ].map((student) => (
-                      <TableRow key={student.id}>
+                      <TableRow key={student._id}>
                         <TableCell>{student.name}</TableCell>
                         <TableCell>{student.assignment}</TableCell>
                         <TableCell>{student.date}</TableCell>
@@ -243,7 +243,7 @@ export default function TeacherDashboard() {
                             className="w-20"
                             onChange={(e) =>
                               console.log(
-                                `Grade for ${student.id}:`,
+                                `Grade for ${student._id}:`,
                                 e.target.value
                               )
                             }
@@ -251,7 +251,7 @@ export default function TeacherDashboard() {
                         </TableCell>
                         <TableCell>
                           <Button
-                            onClick={() => handleGradeSubmit(student.id, "A")}
+                            onClick={() => handleGradeSubmit(student._id, "A")}
                           >
                             Submit Grade
                           </Button>

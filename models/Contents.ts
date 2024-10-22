@@ -22,7 +22,11 @@ const ContentSchema = new Schema<ContentDocument>(
     description: { type: String },
     active: { type: Boolean, default: true },
     type: { type: String, require: true },
-    course: { type: mongoose.Types.ObjectId, ref: "Course", required: true },
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+    },
   },
   { timestamps: true }
 );

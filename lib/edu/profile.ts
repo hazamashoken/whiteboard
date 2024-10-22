@@ -1,16 +1,18 @@
 "use server";
 
-import { Profile, ProfileDocument } from "@/models/Profiles";
-
-export enum PROFILE_TYPES {
-  ADMIN,
-  STUDENT,
-  TEACHER,
-}
+import { connectDB } from "@/db/mongoose";
+import { Profile, PROFILE_TYPES, ProfileDocument } from "@/models";
 
 export type ProfilePayload = Omit<
   ProfileDocument,
-  "createdAt" | "updatedAt" | "active" | "_id" | "courses" | "type"
+  | "createdAt"
+  | "updatedAt"
+  | "active"
+  | "_id"
+  | "courses"
+  | "type"
+  | "image"
+  | "userId"
 >;
 
 // getProfile
@@ -18,12 +20,20 @@ export type ProfilePayload = Omit<
 // createTeacherProfile
 // createAdminProfile
 
-export async function getProfile(id: string) {
-  const profile = await Profile.findById<ProfileDocument>(id);
-  return profile;
+export async function getProfile(email: string) {
+  await connectDB();
+  const profile = await Profile.findOne<ProfileDocument>({
+    email,
+  }).populate("courses");
+
+  return JSON.parse(JSON.stringify(profile));
 }
 
-async function createProfile(payload: ProfilePayload, type: PROFILE_TYPES) {
+export async function createProfile(
+  payload: ProfilePayload,
+  type: PROFILE_TYPES
+) {
+  await connectDB();
   const existingProfile = await Profile.findOne<ProfileDocument>({
     email: payload.email,
   });
@@ -44,18 +54,18 @@ async function createProfile(payload: ProfilePayload, type: PROFILE_TYPES) {
 
   return {
     error: null,
-    data: profile,
+    data: JSON.parse(JSON.stringify(profile)),
   };
 }
 
-export async function createStudentProfile(payload: ProfilePayload) {
-  return await createProfile(payload, PROFILE_TYPES.STUDENT);
-}
+export async function getAllProfile(options?: { type?: PROFILE_TYPES }) {
+  await connectDB();
+  const profiles = await Profile.find<ProfileDocument>({
+    ...(options?.type && { type: options.type }),
+  }).populate("courses");
 
-export async function createTeacherProfile(payload: ProfilePayload) {
-  return await createProfile(payload, PROFILE_TYPES.TEACHER);
-}
-
-export async function createAdminProfile(payload: ProfilePayload) {
-  return await createProfile(payload, PROFILE_TYPES.ADMIN);
+  return {
+    error: null,
+    data: JSON.parse(JSON.stringify(profiles)),
+  };
 }

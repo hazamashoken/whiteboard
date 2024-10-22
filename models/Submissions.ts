@@ -20,7 +20,11 @@ const SubmissionSchema = new Schema<SubmissionDocument>(
     name: { type: String, required: true },
     active: { type: Boolean, default: true },
     type: { type: String, require: true },
-    course: { type: mongoose.Types.ObjectId, ref: "Course", required: true },
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+    },
   },
   { timestamps: true }
 );

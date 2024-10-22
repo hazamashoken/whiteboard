@@ -8,14 +8,18 @@ export interface CourseDocument {
   teachers: [{ type: mongoose.Types.ObjectId; ref: "Profile" }];
   createdAt: Date;
   updatedAt: Date;
+  contents: [{ type: mongoose.Types.ObjectId; ref: "Content" }];
+  assignments: [{ type: mongoose.Types.ObjectId; ref: "Assignment" }];
 }
 
 const CourseSchema = new Schema<CourseDocument>(
   {
     name: { type: String, required: true },
     description: { type: String },
-    students: [{ type: mongoose.Types.ObjectId, ref: "Profile" }],
-    teachers: [{ type: mongoose.Types.ObjectId, ref: "Profile" }],
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Profile" }],
+    teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Profile" }],
+    contents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Content" }],
+    assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assignment" }],
   },
   { timestamps: true }
 );

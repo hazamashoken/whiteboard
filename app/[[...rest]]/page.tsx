@@ -1,13 +1,13 @@
 import { BookOpen } from "lucide-react";
-import { LoginCard } from "./_components/login-card";
-import { auth } from "@/auth";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { SignIn } from "@clerk/nextjs";
 
 export default async function HomePage() {
-  const session = await auth();
+  const { userId } = await auth();
 
-  if (session) {
-    redirect("/");
+  if (userId) {
+    redirect("/board");
   }
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
@@ -20,7 +20,7 @@ export default async function HomePage() {
         </div>
       </header>
       <main className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">
-        <LoginCard />
+        <SignIn path="/" />
       </main>
 
       <footer className="bg-white shadow-sm mt-auto">

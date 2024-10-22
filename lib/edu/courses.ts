@@ -1,19 +1,22 @@
 "use server";
 
-import { Course, CourseDocument } from "@/models/Courses";
+import { connectDB } from "@/db/mongoose";
+import { Course, CourseDocument, Profile } from "@/models";
 
 // addStudentsToCourse
 // addTeachersToCourse
 // createCourse
-export async function addStudentsToCourse(
-  courseId: string,
-  studentIds: string[]
-) {
+// toggleCourse
+// editCourse
+// getCourseByProfile
+// getAllCoursesAdmin
+export async function addStudentsToCourse(courseId: string, userIds: string[]) {
+  await connectDB();
   const course = await Course.findByIdAndUpdate<CourseDocument>(
     courseId,
     {
       $addToSet: {
-        students: { $each: studentIds },
+        students: { $each: userIds },
       },
     },
     { new: true }
@@ -28,21 +31,28 @@ export async function addStudentsToCourse(
     };
   }
 
+  const profile = await Profile.updateMany(
+    { _id: { $in: userIds } },
+    {
+      $addToSet: {
+        courses: courseId,
+      },
+    }
+  );
+
   return {
     error: null,
-    data: course,
+    data: JSON.parse(JSON.stringify(course)),
   };
 }
 
-export async function addTeachersToCourse(
-  courseId: string,
-  teacherIds: string[]
-) {
+export async function addTeachersToCourse(courseId: string, userIds: string[]) {
+  await connectDB();
   const course = await Course.findByIdAndUpdate<CourseDocument>(
     courseId,
     {
       $addToSet: {
-        teachers: { $each: teacherIds },
+        teachers: { $each: userIds },
       },
     },
     { new: true }
@@ -57,31 +67,105 @@ export async function addTeachersToCourse(
     };
   }
 
+  const profile = await Profile.updateMany(
+    { _id: { $in: userIds } },
+    {
+      $addToSet: {
+        courses: courseId,
+      },
+    }
+  );
+
   return {
     error: null,
-    data: course,
+    data: JSON.parse(JSON.stringify(course)),
   };
 }
 
-export type CoursePayload = Omit<
+export type CourseCreationPayload = Omit<
   CourseDocument,
-  "_id" | "createdAt" | "updatedAt" | "students" | "teachers"
+  | "_id"
+  | "createdAt"
+  | "updatedAt"
+  | "students"
+  | "teachers"
+  | "contents"
+  | "assignments"
 >;
 
-export async function createCourse(payload: CoursePayload) {
+export type CourseEditPayload = Omit<
+  CourseDocument,
+  | "_id"
+  | "createdAt"
+  | "updatedAt"
+  | "students"
+  | "teachers"
+  | "contents"
+  | "assignments"
+>;
+
+export async function createCourse(payload: CourseCreationPayload): Promise<{
+  error: string | null;
+  data: CourseDocument | null;
+}> {
   const data = {
     ...payload,
   };
+  await connectDB();
 
   const course = await Course.create<CourseDocument>(data);
 
+  if (!course) {
+    return {
+      error: "Course not created",
+      data: null,
+    };
+  }
+
   return {
     error: null,
-    data: course,
+    data: JSON.parse(JSON.stringify(course)),
   };
 }
 
-export async function toggleCourse(courseId: string) {
+export async function editCourse(
+  courseId: string,
+  payload: CourseCreationPayload
+): Promise<{
+  error: string | null;
+  data: CourseDocument | null;
+}> {
+  const data = {
+    ...payload,
+  };
+  await connectDB();
+
+  const course = await Course.findByIdAndUpdate<CourseDocument>(
+    courseId,
+    {
+      $set: data,
+    },
+    { new: true }
+  );
+
+  if (!course) {
+    return {
+      error: "Course not found",
+      data: null,
+    };
+  }
+
+  return {
+    error: null,
+    data: JSON.parse(JSON.stringify(course)),
+  };
+}
+
+export async function toggleCourse(courseId: string): Promise<{
+  error: string | null;
+  data: CourseDocument | null;
+}> {
+  await connectDB();
   const course = await Course.findByIdAndUpdate<CourseDocument>(courseId, {
     $set: {
       active: true,
@@ -97,6 +181,75 @@ export async function toggleCourse(courseId: string) {
 
   return {
     error: null,
-    data: course,
+    data: JSON.parse(JSON.stringify(course)),
+  };
+}
+
+export async function getCourseByProfile(profileId: string): Promise<{
+  error: string | null;
+  data: CourseDocument[] | null;
+}> {
+  await connectDB();
+  const profile = await Profile.findOne({ userId: profileId });
+  const course = await Course.find<CourseDocument>({
+    $or: [{ students: profile._id }, { teachers: profile._id }],
+  })
+    .populate("students")
+    .populate("teachers");
+
+  if (!course) {
+    return {
+      error: "Course not found",
+      data: null,
+    };
+  }
+
+  return {
+    error: null,
+    data: JSON.parse(JSON.stringify(course)),
+  };
+}
+
+export async function getAllCoursesAdmin(): Promise<{
+  error: string | null;
+  data: CourseDocument[] | null;
+}> {
+  await connectDB();
+  const courses = await Course.find<CourseDocument>()
+    .populate("students")
+    .populate("teachers");
+
+  if (!courses) {
+    return {
+      error: "Courses not found",
+      data: null,
+    };
+  }
+
+  return {
+    error: null,
+    data: JSON.parse(JSON.stringify(courses)),
+  };
+}
+
+export async function getCourseById(courseId: string): Promise<{
+  error: string | null;
+  data: CourseDocument | null;
+}> {
+  await connectDB();
+  const course = await Course.findById<CourseDocument>(courseId)
+    .populate("students")
+    .populate("teachers");
+
+  if (!course) {
+    return {
+      error: "Course not found",
+      data: null,
+    };
+  }
+
+  return {
+    error: null,
+    data: JSON.parse(JSON.stringify(course)),
   };
 }

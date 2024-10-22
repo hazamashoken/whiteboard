@@ -1,7 +1,7 @@
 "use server";
 
-import { Assignment, AssignmentDocument } from "@/models/Assignments";
-import { Course } from "@/models/Courses";
+import { connectDB } from "@/db/mongoose";
+import { Assignment, AssignmentDocument, Course } from "@/models";
 
 export type AssignmentPayload = Omit<
   AssignmentDocument,
@@ -15,6 +15,7 @@ export type AssignmentPayload = Omit<
 // removeAssignment
 
 export async function getAssignmentsByCourse(courseId: string, active = true) {
+  await connectDB();
   const assignments = await Assignment.find<AssignmentDocument>({
     course: courseId,
     active,
@@ -27,6 +28,7 @@ export async function getAssignmentsByCourse(courseId: string, active = true) {
 }
 
 export async function getAssignment(assignmentId: string) {
+  await connectDB();
   const assignment = await Assignment.findById<AssignmentDocument>(
     assignmentId
   );
@@ -38,6 +40,7 @@ export async function getAssignment(assignmentId: string) {
 }
 
 export async function getAllAssignment() {
+  await connectDB();
   const assignments = await Assignment.find<AssignmentDocument>();
 
   return {
@@ -54,6 +57,7 @@ export async function addAssignmentToCourse(
     ...payload,
     course: courseId,
   };
+  await connectDB();
 
   const assignment = await Assignment.create<AssignmentDocument>(data);
 
@@ -70,6 +74,7 @@ export async function addAssignmentToCourse(
 }
 
 export async function removeAssignment(assignmentId: string) {
+  await connectDB();
   const assignment = await Assignment.findById(assignmentId);
 
   if (!Assignment) {
@@ -94,6 +99,7 @@ export async function removeAssignment(assignmentId: string) {
 }
 
 export async function toggleAssignment(assignmentId: string) {
+  await connectDB();
   const assignment = await Assignment.findByIdAndUpdate<AssignmentDocument>(
     assignmentId,
     {
